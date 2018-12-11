@@ -27,7 +27,7 @@ const NSTimeInterval DefaultAutoCompleteRequestDelay = 0.1;
 @interface MLPAutoCompleteSortOperation: NSOperation
 @property (strong) NSString *incompleteString;
 @property (strong) NSArray *possibleCompletions;
-@property (strong) id <MLPAutoCompleteSortOperationDelegate> delegate;
+@property (weak  ) id <MLPAutoCompleteSortOperationDelegate> delegate;
 @property (strong) NSDictionary *boldTextAttributes;
 @property (strong) NSDictionary *regularTextAttributes;
 
@@ -300,6 +300,10 @@ withAutoCompleteString:(NSString *)string {
     NSString *autoCompleteString = selectedCell.textLabel.text;
     self.text = autoCompleteString;
     
+    if (indexPath.row > [self.autoCompleteSuggestions count]) {
+        return;
+    }
+    
     id<MLPAutoCompletionObject> autoCompleteObject = self.autoCompleteSuggestions[indexPath.row];
     if (![autoCompleteObject conformsToProtocol:@protocol(MLPAutoCompletionObject)]){
         autoCompleteObject = nil;
@@ -369,12 +373,14 @@ withAutoCompleteString:(NSString *)string {
 - (BOOL)becomeFirstResponder {
     [self saveCurrentShadowProperties];
     
+    BOOL becomeFirstResponder = [super becomeFirstResponder];
+    
     if (self.showAutoCompleteTableWhenEditingBegins ||
         self.autoCompleteTableAppearsAsKeyboardAccessory){
         [self fetchAutoCompleteSuggestions];
     }
     
-    return [super becomeFirstResponder];
+    return becomeFirstResponder;
 }
 
 - (void)finishedSearching {
@@ -388,6 +394,7 @@ withAutoCompleteString:(NSString *)string {
     if (!self.autoCompleteTableAppearsAsKeyboardAccessory){
         [self closeAutoCompleteTableView];
     }
+    
     return [super resignFirstResponder];
 }
 
