@@ -380,6 +380,8 @@ withAutoCompleteString:(NSString *)string {
         [self fetchAutoCompleteSuggestions];
     }
     
+    self.autoCompleteTableView.layer.position = CGPointZero;
+    
     return becomeFirstResponder;
 }
 
