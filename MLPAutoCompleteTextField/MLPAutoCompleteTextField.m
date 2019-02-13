@@ -372,9 +372,7 @@ withAutoCompleteString:(NSString *)string {
 
 - (BOOL)becomeFirstResponder {
     [self saveCurrentShadowProperties];
-    
-    BOOL becomeFirstResponder = [super becomeFirstResponder];
-    
+        
     if (self.showAutoCompleteTableWhenEditingBegins ||
         self.autoCompleteTableAppearsAsKeyboardAccessory){
         [self fetchAutoCompleteSuggestions];
@@ -382,7 +380,7 @@ withAutoCompleteString:(NSString *)string {
     
     self.autoCompleteTableView.layer.position = CGPointZero;
     
-    return becomeFirstResponder;
+    return [super becomeFirstResponder];
 }
 
 - (void)finishedSearching {
