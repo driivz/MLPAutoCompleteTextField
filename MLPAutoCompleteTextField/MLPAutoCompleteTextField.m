@@ -150,7 +150,9 @@ static NSString *kDefaultAutoCompleteCellIdentifier = @"_DefaultAutoCompleteCell
 }
 
 - (void)stopObservingKeyPathsAndNotifications {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UITextFieldTextDidChangeNotification
+                                                  object:self];
     
     [self removeObserver:self forKeyPath:kBorderStyleKeyPath];
     [self removeObserver:self forKeyPath:kAutoCompleteTableViewHiddenKeyPath];
