@@ -33,6 +33,8 @@
 
 @property (strong, readonly) UITableView *autoCompleteTableView;
 
+@property (nonatomic, strong) UIView *containerView;
+
 // all delegates and datasources should be weak referenced
 @property (weak) IBOutlet id <MLPAutoCompleteTextFieldDataSource> autoCompleteDataSource;
 @property (weak) IBOutlet id <MLPAutoCompleteTextFieldDelegate> autoCompleteDelegate;

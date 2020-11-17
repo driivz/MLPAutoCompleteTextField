@@ -455,8 +455,13 @@ withAutoCompleteString:(NSString *)string {
             UIView *rootView = (self.window.subviews).firstObject;
             [rootView addSubview:self.autoCompleteTableView];
         } else {
-            [self.superview insertSubview:self.autoCompleteTableView
-                             belowSubview:self];
+            if (self.containerView) {
+                [self.containerView addSubview:self.autoCompleteTableView];
+                [self.containerView bringSubviewToFront:self.autoCompleteTableView];
+            } else {
+                [self.superview insertSubview:self.autoCompleteTableView
+                                 belowSubview:self];
+            }
         }
 #endif
         [self.autoCompleteTableView setUserInteractionEnabled:YES];
@@ -836,10 +841,14 @@ withAutoCompleteString:(NSString *)string {
 - (CGRect)autoCompleteTableViewFrameForTextField:(MLPAutoCompleteTextField *)textField {
     CGRect frame = CGRectZero;
     
-    if (CGRectGetWidth(self.autoCompleteTableFrame) > 0){
+    if (CGRectGetWidth(self.autoCompleteTableFrame) > 0) {
         frame = self.autoCompleteTableFrame;
     } else {
-        frame = textField.frame;
+        if (self.containerView) {
+            frame = [self.containerView convertRect:textField.bounds fromView:textField];
+        } else {
+            frame = textField.frame;
+        }
         frame.origin.y += textField.frame.size.height;
     }
     
